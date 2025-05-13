@@ -6,6 +6,9 @@ use App\Filament\Resources\PelangganResource\Pages;
 use App\Filament\Resources\PelangganResource\RelationManagers;
 use App\Models\Pelanggan;
 use App\Models\Tarif;
+use App\Models\Pembayaran;
+use App\Models\Tagihan;
+use App\Models\Penggunaan;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -52,7 +55,7 @@ class PelangganResource extends Resource
                 Tables\Columns\TextColumn::make('alamat')
                     ->limit(30)
                     ->searchable(),
-                    Tables\Columns\TextColumn::make('tarif_info')
+                Tables\Columns\TextColumn::make('tarif_info')
                     ->label('Kode Tarif')
                     ->getStateUsing(function ($record) {
                         $golongan = $record->tarif->golongan_tarif ?? '-';
@@ -75,11 +78,39 @@ class PelangganResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation()
+                    ->before(function ($record) {
+                        // Hapus semua data terkait secara berurutan
+                        $pelangganId = $record->id;
+                        
+                        // 1. Hapus pembayaran
+                        Pembayaran::where('id_pelanggan', $pelangganId)->delete();
+                        
+                        // 2. Hapus tagihan
+                        Tagihan::where('id_pelanggan', $pelangganId)->delete();
+                        
+                        // 3. Hapus penggunaan
+                        Penggunaan::where('id_pelanggan', $pelangganId)->delete();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function ($records) {
+                            foreach ($records as $record) {
+                                $pelangganId = $record->id;
+                                
+                                // 1. Hapus pembayaran
+                                Pembayaran::where('id_pelanggan', $pelangganId)->delete();
+                                
+                                // 2. Hapus tagihan
+                                Tagihan::where('id_pelanggan', $pelangganId)->delete();
+                                
+                                // 3. Hapus penggunaan
+                                Penggunaan::where('id_pelanggan', $pelangganId)->delete();
+                            }
+                        }),
                 ]),
             ]);
     }

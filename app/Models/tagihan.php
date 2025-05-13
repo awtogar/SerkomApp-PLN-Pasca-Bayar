@@ -39,9 +39,9 @@ class Tagihan extends Model
         return $this->hasOne(Pembayaran::class, 'id_tagihan');
     }
     
-    // Status pembayaran
+
     public function getStatusText(): string
     {
-        return $this->status == 0 ? 'Belum Dibayar' : 'Sudah Dibayar';
+        return $this->status == 1 ? 'Sudah Dibayar' : 'Belum Dibayar';
     }
 }

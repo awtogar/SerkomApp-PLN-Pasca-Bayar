@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Agen extends Authenticatable
 {
@@ -32,5 +32,6 @@ class Agen extends Authenticatable
     public function pembayaran(): HasMany
     {
         return $this->hasMany(Pembayaran::class, 'id_agen');
+        // return $this->hasMany(Pembayaran::class, 'id_agen')->cascadeOnDelete();
     }
 }

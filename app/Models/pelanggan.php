@@ -29,15 +29,18 @@ class Pelanggan extends Model
     public function penggunaan(): HasMany
     {
         return $this->hasMany(Penggunaan::class, 'id_pelanggan');
+        // return $this->hasMany(Penggunaan::class, 'id_pelanggan')->cascadeOnDelete();
     }
     
     public function tagihan(): HasMany
     {
         return $this->hasMany(Tagihan::class, 'id_pelanggan');
+        // return $this->hasMany(Tagihan::class, 'id_pelanggan')->cascadeOnDelete();
     }
     
     public function pembayaran(): HasMany
     {
         return $this->hasMany(Pembayaran::class, 'id_pelanggan');
+        // return $this->hasMany(Pembayaran::class, 'id_pelanggan')->cascadeOnDelete();
     }
 }

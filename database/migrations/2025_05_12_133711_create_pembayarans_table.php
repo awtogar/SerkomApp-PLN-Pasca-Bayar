@@ -1,5 +1,5 @@
 <?php
-
+// /Users/awtogar/Development/tagihan-listrik/database/migrations/2025_05_12_133711_create_pembayarans_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

@@ -23,10 +23,10 @@ class TarifResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('kode_tarif')
-                    ->required()
-                    ->maxLength(20)
-                    ->unique(ignoreRecord: true)
-                    ->label('Kode Tarif'),
+                ->label('Kode Tarif')
+                ->required()
+                ->maxLength(20)
+                ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('golongan_tarif')
                     ->required()
                     ->maxLength(50)

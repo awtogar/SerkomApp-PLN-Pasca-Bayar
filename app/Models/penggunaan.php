@@ -30,9 +30,10 @@ class Penggunaan extends Model
     public function tagihan(): HasOne
     {
         return $this->hasOne(Tagihan::class, 'id_penggunaan');
+        // return $this->hasOne(Tagihan::class, 'id_penggunaan')->cascadeOnDelete();
     }
     
-    // Method untuk menghitung jumlah penggunaan meter
+    // Method untuk menghitung jumlah meter
     public function getJumlahMeter(): int
     {
         return $this->meter_akhir - $this->meter_awal;
