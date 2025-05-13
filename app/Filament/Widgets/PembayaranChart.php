@@ -48,11 +48,11 @@ class PembayaranChart extends ChartWidget
             $monthName = $month->format('M Y');
             $months->push($monthName);
             
-            // $total = Pembayaran::whereYear('tanggal_bayar', $month->year)
-            //     ->whereMonth('tanggal_bayar', $month->month)
-            //     ->sum('total_bayar');
+            $total = Pembayaran::whereYear('tanggal_pembayaran', $month->year)
+            ->whereMonth('tanggal_pembayaran', $month->month)
+            ->sum('total_bayar');
                 
-            // $values->push($total);
+            $values->push($total);
         }
         
         return [

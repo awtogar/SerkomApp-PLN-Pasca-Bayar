@@ -1,5 +1,5 @@
 <?php
-
+// /Users/awtogar/Development/tagihan-listrik/app/Filament/Resources/PelangganResource/RelationManagers/PenggunaanRelationManager.php
 namespace App\Filament\Resources\PelangganResource\RelationManagers;
 
 use App\Models\Penggunaan;
@@ -50,9 +50,10 @@ class PenggunaanRelationManager extends RelationManager
                     ->numeric(),
                 Tables\Columns\TextColumn::make('meter_akhir')
                     ->numeric(),
-                Tables\Columns\TextColumn::make('getJumlahMeter')
-                    ->label('Total Meter')
-                    ->numeric(),
+                Tables\Columns\TextColumn::make('total_meter')
+                ->label('Total Meter')
+                ->numeric()
+                ->getStateUsing(fn ($record) => $record->getJumlahMeter()),                
             ])
             ->filters([
                 //

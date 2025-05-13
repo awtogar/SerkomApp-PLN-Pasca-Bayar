@@ -1,5 +1,5 @@
 <?php
-
+// /Users/awtogar/Development/tagihan-listrik/app/Filament/Resources/PelangganResource/RelationManagers/TagihanRelationManager.php
 namespace App\Filament\Resources\PelangganResource\RelationManagers;
 
 use App\Models\Tagihan;
@@ -58,10 +58,11 @@ class TagihanRelationManager extends RelationManager
                     ->numeric(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
+                    ->color(fn ($state) => match ((int) $state) {
                         0 => 'danger',
                         1 => 'success',
-                    })
+                        default => 'gray', // fallback biar ga error
+                    })                    
                     ->formatStateUsing(fn ($state) => $state == 0 ? 'Belum Dibayar' : 'Sudah Dibayar'),
                 Tables\Columns\TextColumn::make('total_bayar')
                     ->money('IDR')

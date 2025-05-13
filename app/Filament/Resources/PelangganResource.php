@@ -36,11 +36,18 @@ class PelangganResource extends Resource
                 Forms\Components\Textarea::make('alamat')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\Select::make('id_tarif')
-                    ->label('Tarif')
-                    ->options(Tarif::all()->pluck('golongan_tarif', 'id'))
+                    Forms\Components\Select::make('id_tarif')
+                    ->label('Tarif (Golongan / Daya)')
+                    ->options(
+                        Tarif::all()->mapWithKeys(function ($tarif) {
+                            return [
+                                $tarif->id => "{$tarif->golongan_tarif}/{$tarif->daya} VA",
+                            ];
+                        })
+                    )
                     ->required()
                     ->searchable(),
+                
             ]);
     }
 
@@ -49,7 +56,8 @@ class PelangganResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_meter')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('nama_pelanggan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alamat')
@@ -62,7 +70,6 @@ class PelangganResource extends Resource
                         $daya = $record->tarif->daya ?? '-';
                         return "{$golongan}/{$daya}VA";
                     })
-                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

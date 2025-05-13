@@ -58,10 +58,10 @@ class TarifResource extends Resource
                 Tables\Columns\TextColumn::make('daya')
                     ->sortable()
                     ->suffix(' VA'),
-                Tables\Columns\TextColumn::make('tarif_perkwh')
-                    ->money('IDR')
-                    ->sortable()
-                    ->label('Tarif per kWh'),
+                    Tables\Columns\TextColumn::make('tarif_perkwh')
+                    ->label('Tarif per kWh')
+                    ->getStateUsing(fn ($record) => 'Rp. ' . number_format($record->tarif_perkwh, 0, ',', '.'))
+                    ->sortable(),                
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

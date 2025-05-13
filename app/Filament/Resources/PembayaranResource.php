@@ -11,9 +11,9 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 
@@ -145,11 +145,11 @@ class PembayaranResource extends Resource
                         return $query
                             ->when(
                                 $data['dari_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_pembayaran', '>=', $date),
+                                fn (Builder $query, $date) => $query->whereDate('tanggal_pembayaran', '>=', $date),
                             )
                             ->when(
                                 $data['sampai_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_pembayaran', '<=', $date),
+                                fn (Builder $query, $date) => $query->whereDate('tanggal_pembayaran', '<=', $date),
                             );
                     }),
                 Tables\Filters\SelectFilter::make('id_agen')
@@ -157,12 +157,12 @@ class PembayaranResource extends Resource
                     ->options(Agen::all()->pluck('nama_agen', 'id')),
             ])
             ->actions([
-                Tables\Actions\Action::make('cetak_struk')
-                    ->label('Cetak Struk')
-                    ->icon('heroicon-o-printer')
-                    ->color('info')
-                    ->url(fn (Pembayaran $record) => route('struk.pembayaran', $record))
-                    ->openUrlInNewTab(),
+                Action::make('cetak_struk')
+                            ->label('Cetak Struk')
+                            ->icon('heroicon-o-printer')
+                            ->color('info')
+                            ->url(fn (Pembayaran $record) => route('struk.pembayaran', $record->id))
+                            ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
