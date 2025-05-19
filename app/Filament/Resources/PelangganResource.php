@@ -19,9 +19,10 @@ class PelangganResource extends Resource
 {
     protected static ?string $model = Pelanggan::class;
 
-    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Pelanggan';
+    protected static ?string $navigationGroup = 'Informasi';
+    protected static ?int $navigationSort = 2;
 
     public static function getPluralLabel(): string
     {

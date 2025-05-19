@@ -14,10 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TarifResource extends Resource
 {
-        protected static ?int $navigationSort = 1;
     protected static ?string $model = Tarif::class;
-
+    
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+    protected static ?string $navigationGroup = 'Informasi';
+    protected static ?int $navigationSort = 1;
     public static function getPluralLabel(): string
     {
         return 'Tarif';

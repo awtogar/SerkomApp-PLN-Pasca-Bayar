@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Hash;
 class PetugasResource extends Resource
 {
     protected static ?string $model = Petugas::class;
-
-        protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationGroup = 'Informasi';
+
+    protected static ?int $navigationSort = 3;
 
 
     public static function form(Form $form): Form
@@ -41,7 +42,7 @@ class PetugasResource extends Resource
                 Forms\Components\Select::make('level')
                     ->options([
                         'admin' => 'Admin',
-                        'petugas' => 'Petugas',
+                        'staff' => 'Staff',
                     ])
                     ->required(),
             ]);

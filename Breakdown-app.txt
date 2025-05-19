@@ -1,0 +1,28 @@
+🔌 1. Pendaftaran & Manajemen Data
+        Admin bisa tambah data:
+        Tarif listrik (kode, golongan, daya, tarif per kWh).
+        Pelanggan (nomor meter, nama, alamat, dan tarif).
+        Petugas (staff/admin).
+        Agen (pihak yang handle pembayaran pelanggan).
+
+    📊 2. Pencatatan Penggunaan Listrik
+        Petugas input data penggunaan listrik pelanggan setiap bulan:
+        meter_awal, meter_akhir, bulan, tahun.
+        Sistem otomatis hitung jumlah pemakaian.
+
+    🧾 3. Pembuatan Tagihan
+        Dari data penggunaan, sistem buat tagihan otomatis:
+        Hitung: jumlah_meter x tarif_perkwh.
+        Simpan total_bayar, status (default 0 = belum bayar).
+
+    💵 4. Proses Pembayaran
+        Agen handle pembayaran dari pelanggan.
+        Input:
+            Tanggal bayar, bulan & tahun tagihan, biaya admin, dan total bayar.
+        Sistem update status tagihan jadi 1 (sudah bayar).
+
+    🔐 5. Hak Akses
+        Ada beberapa role:
+            Admin: Kelola data master.
+            Petugas: Input penggunaan listrik.
+            Agen: Proses pembayaran.

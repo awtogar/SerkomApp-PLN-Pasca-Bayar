@@ -16,6 +16,7 @@ class AgenResource extends Resource
 {
     protected static ?string $model = Agen::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+        protected static ?string $navigationGroup = 'Pembayaran';
     protected static ?int $navigationSort = 5;
     public static function getPluralLabel(): string
     {

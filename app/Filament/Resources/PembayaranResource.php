@@ -20,15 +20,17 @@ use Illuminate\Database\Eloquent\Model;
 class PembayaranResource extends Resource
 {
     protected static ?string $model = Pembayaran::class;
-        protected static ?int $navigationSort = 3;
-
+    
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationGroup = 'Pembayaran';
+    protected static ?int $navigationSort = 6;
+
     public static function getPluralLabel(): string
     {
         return 'Pembayaran';
     }
     
-    protected static ?string $navigationGroup = 'Tagihan';
+        
 
     public static function form(Form $form): Form
     {
