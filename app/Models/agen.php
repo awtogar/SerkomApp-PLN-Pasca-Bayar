@@ -18,6 +18,7 @@ class Agen extends Authenticatable
     
     protected $fillable = [
         'username',
+        'email',
         'password',
         'nama_agen',
         'alamat_agen',
