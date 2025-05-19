@@ -15,10 +15,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TagihanResource extends Resource
 {
+    protected static ?int $navigationSort = 2;
     protected static ?string $model = Tagihan::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationGroup = 'Tagihan';
-    protected static ?string $navigationLabel = 'Tagihan';
+    public static function getPluralLabel(): string
+    {
+        return 'Tagihan';
+    }
 
     public static function form(Form $form): Form
     {

@@ -6,9 +6,13 @@ use App\Filament\Resources\PembayaranResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListPembayarans extends ListRecords
+class ListPembayaran extends ListRecords
 {
     protected static string $resource = PembayaranResource::class;
+    public static function getNavigationLabel(): string
+{
+    return 'Pembayaran';
+}
 
     protected function getHeaderActions(): array
     {

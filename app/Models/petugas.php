@@ -16,6 +16,7 @@ class Petugas extends Authenticatable
     
     protected $fillable = [
         'username',
+        'email',
         'password',
         'nama_petugas',
         'level',

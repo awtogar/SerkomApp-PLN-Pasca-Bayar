@@ -16,6 +16,11 @@ class AgenResource extends Resource
 {
     protected static ?string $model = Agen::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static ?int $navigationSort = 5;
+    public static function getPluralLabel(): string
+    {
+        return 'Agen';
+    }
 
     public static function form(Form $form): Form
     {
@@ -109,7 +114,7 @@ class AgenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAgens::route('/'),
+            'index' => Pages\ListAgen::route('/'),
             'create' => Pages\CreateAgen::route('/create'),
             'edit' => Pages\EditAgen::route('/{record}/edit'),
         ];

@@ -19,8 +19,14 @@ class PelangganResource extends Resource
 {
     protected static ?string $model = Pelanggan::class;
 
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $navigationLabel= 'Pelanggan';
+    protected static ?string $navigationLabel = 'Pelanggan';
+
+    public static function getPluralLabel(): string
+    {
+        return 'Pelanggan';
+    }
 
     public static function form(Form $form): Form
     {
@@ -39,6 +45,8 @@ class PelangganResource extends Resource
                     Forms\Components\Select::make('id_tarif')
                     ->label('Tarif (Golongan / Daya)')
                     ->options(
+                        // Pengecualian: pengambilan data langsung dari model dalam form
+                        // karena daftar tarif perlu ditampilkan secara real-time
                         Tarif::all()->mapWithKeys(function ($tarif) {
                             return [
                                 $tarif->id => "{$tarif->golongan_tarif}/{$tarif->daya} VA",
@@ -46,7 +54,7 @@ class PelangganResource extends Resource
                         })
                     )
                     ->required()
-                    ->searchable(),
+                
                 
             ]);
     }

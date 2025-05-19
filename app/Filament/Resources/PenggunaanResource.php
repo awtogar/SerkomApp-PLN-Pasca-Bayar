@@ -18,7 +18,10 @@ class PenggunaanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
     
     protected static ?string $navigationGroup = 'Tagihan';
-    protected static?string $navigationLabel = 'Penggunaan';
+    public static function getPluralLabel(): string
+    {
+        return 'Penggunaan';
+    }
 
     public static function form(Form $form): Form
     {

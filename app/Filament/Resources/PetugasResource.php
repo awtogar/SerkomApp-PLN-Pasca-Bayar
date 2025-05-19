@@ -15,6 +15,7 @@ class PetugasResource extends Resource
 {
     protected static ?string $model = Petugas::class;
 
+        protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
 
@@ -25,6 +26,9 @@ class PetugasResource extends Resource
                 Forms\Components\TextInput::make('username')
                     ->required()
                     ->maxLength(100)
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('email')
+                    ->required()
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('password')
                     ->password()

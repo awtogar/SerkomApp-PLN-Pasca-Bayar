@@ -20,8 +20,13 @@ use Illuminate\Database\Eloquent\Model;
 class PembayaranResource extends Resource
 {
     protected static ?string $model = Pembayaran::class;
+        protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    public static function getPluralLabel(): string
+    {
+        return 'Pembayaran';
+    }
     
     protected static ?string $navigationGroup = 'Tagihan';
 
@@ -183,7 +188,7 @@ class PembayaranResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPembayarans::route('/'),
+            'index' => Pages\ListPembayaran::route('/'),
             'create' => Pages\CreatePembayaran::route('/create'),
             'edit' => Pages\EditPembayaran::route('/{record}/edit'),
         ];

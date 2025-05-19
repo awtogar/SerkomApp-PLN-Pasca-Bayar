@@ -1,5 +1,5 @@
 <?php
-
+// /Users/awtogar/Development/tagihan-listrik/app/Providers/Filament/AdminPanelProvider.php
 namespace App\Providers\Filament;
 
 use Filament\Http\Middleware\Authenticate;
@@ -42,8 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 // Custom widgets
-                StatsOverview::class,
                 LatestPelanggan::class,
+                StatsOverview::class,
                 PembayaranChart::class,
             ])
             ->middleware([

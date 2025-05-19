@@ -14,9 +14,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TarifResource extends Resource
 {
+        protected static ?int $navigationSort = 1;
     protected static ?string $model = Tarif::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+    public static function getPluralLabel(): string
+    {
+        return 'Tarif';
+    }
 
     public static function form(Form $form): Form
     {
@@ -30,7 +35,8 @@ class TarifResource extends Resource
                 Forms\Components\TextInput::make('golongan_tarif')
                     ->required()
                     ->maxLength(50)
-                    ->label('Golongan Tarif'),
+                    ->label('Golongan Tarif')
+                    ->required(),
                 Forms\Components\TextInput::make('daya')
                     ->required()
                     ->maxLength(20)
