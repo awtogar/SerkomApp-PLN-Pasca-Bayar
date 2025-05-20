@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('agen', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('username')->unique();
             $table->string('password');
             $table->string('nama_agen');

@@ -32,6 +32,11 @@ class AgenResource extends Resource
                     ->maxLength(100)
                     ->unique(ignoreRecord: true),
                 
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),   
+            
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))

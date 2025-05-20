@@ -1,5 +1,5 @@
 <?php
-// /Users/awtogar/Development/tagihan-listrik/app/Filament/Resources/PelangganResource.php
+// Fixed PelangganResource.php
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PelangganResource\Pages;
@@ -43,20 +43,16 @@ class PelangganResource extends Resource
                 Forms\Components\Textarea::make('alamat')
                     ->required()
                     ->columnSpanFull(),
-                    Forms\Components\Select::make('id_tarif')
+                Forms\Components\Select::make('id_tarif')
                     ->label('Tarif (Golongan / Daya)')
                     ->options(
-                        // Pengecualian: pengambilan data langsung dari model dalam form
-                        // karena daftar tarif perlu ditampilkan secara real-time
                         Tarif::all()->mapWithKeys(function ($tarif) {
                             return [
-                                $tarif->id => "{$tarif->golongan_tarif}/{$tarif->daya} VA",
+                                $tarif->id => "{$tarif->golongan}/{$tarif->daya} VA",
                             ];
                         })
                     )
                     ->required()
-                
-                
             ]);
     }
 
@@ -73,13 +69,9 @@ class PelangganResource extends Resource
                     ->limit(30)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tarif_info')
-                    ->label('Kode Tarif')
-                    ->getStateUsing(function ($record) {
-                        $golongan = $record->tarif->golongan_tarif ?? '-';
-                        $daya = $record->tarif->daya ?? '-';
-                        return "{$golongan}/{$daya}VA";
-                    })
-                    ->searchable(),
+                    ->label('Golongan/Daya')
+                    ->getStateUsing(fn($record) => "{$record->tarif->golongan}/{$record->tarif->daya}VA")
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
