@@ -15,11 +15,25 @@ class PenggunaanRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
+         return $form
             ->schema([
-                Forms\Components\TextInput::make('bulan')
-                    ->required()
-                    ->maxLength(20),
+                Forms\Components\Select::make('bulan')
+                    ->label('Bulan')
+                    ->options([
+                        1 => 'Januari',
+                        2 => 'Februari',
+                        3 => 'Maret',
+                        4 => 'April',
+                        5 => 'Mei',
+                        6 => 'Juni',
+                        7 => 'Juli',
+                        8 => 'Agustus',
+                        9 => 'September',
+                        10 => 'Oktober',
+                        11 => 'November',
+                        12 => 'Desember',
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('tahun')
                     ->required()
                     ->numeric()
@@ -42,18 +56,16 @@ class PenggunaanRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('bulan')
             ->columns([
-                Tables\Columns\TextColumn::make('bulan')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('tahun')
+                  Tables\Columns\TextColumn::make('tahun')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('meter_awal')
                     ->numeric(),
                 Tables\Columns\TextColumn::make('meter_akhir')
                     ->numeric(),
-                Tables\Columns\TextColumn::make('total_meter')
-                ->label('Total Meter')
-                ->numeric()
-                ->getStateUsing(fn ($record) => $record->getJumlahMeter()),                
+                Tables\Columns\TextColumn::make('jumlah_meter')
+                    ->label('Total Meter')
+                    ->getStateUsing(fn ($record) => $record->getJumlahMeter())
+                    ->numeric(),         
             ])
             ->filters([
                 //

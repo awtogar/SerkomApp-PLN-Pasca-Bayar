@@ -51,7 +51,7 @@ class TagihanResource extends Resource
                             ->mapWithKeys(function ($penggunaan) {
                                 $jumlahMeter = $penggunaan->getJumlahMeter();
                                 return [
-                                    $penggunaan->id => "Bulan: {$penggunaan->bulan} {$penggunaan->tahun} - Meter: {$jumlahMeter}"
+                                    $penggunaan->id => "Bulan: {$penggunaan->bulan} {$penggunaan->tahun} - Yeah: {$jumlahMeter}"
                                 ];
                             });
                     })

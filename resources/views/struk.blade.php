@@ -125,6 +125,12 @@
             z-index: 0;
             white-space: nowrap;
         }
+        
+        .summary {
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -157,17 +163,27 @@
             <div class="label">BULAN</div>
             <div class="value">{{ strtoupper($tagihan->bulan) }} {{ $tagihan->tahun }}</div>
             
-            <div class="label">TOTAL</div>
-            <div class="value">Rp {{ number_format($pembayaran->total_bayar, 0, ',', '.') }}</div>
-            
-            <div class="label">ADM</div>
-            <div class="value">Rp {{ number_format($pembayaran->biaya_admin, 0, ',', '.') }}</div>
-            
             <div class="label">AGEN</div>
             <div class="value">{{ $agen->nama_agen }}</div>
             
             <div class="label">TGL BAYAR</div>
             <div class="value">{{ $pembayaran->tanggal_pembayaran->format('d/m/Y') }}</div>
+        </div>
+
+        <div class="divider"></div>
+        
+        <!-- Rincian Pembayaran -->
+        <div class="content summary">
+            <div class="label">TAGIHAN</div>
+            <div class="value">Rp {{ number_format($tagihan->total_bayar, 0, ',', '.') }}</div>
+            
+            <div class="label">BIAYA ADMIN</div>
+            <div class="value">Rp {{ number_format($pembayaran->biaya_admin, 0, ',', '.') }}</div>
+            
+            <div class="divider"></div>
+            
+            <div class="label total-row">TOTAL BAYAR</div>
+            <div class="value total-row">Rp {{ number_format($pembayaran->total_bayar + $pembayaran->biaya_admin, 0, ',', '.') }}</div>
         </div>
         
         <div class="divider"></div>

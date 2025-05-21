@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-
+@import 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

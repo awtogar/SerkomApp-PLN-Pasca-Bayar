@@ -26,7 +26,8 @@ protected static function booted()
 {
     static::creating(function ($tarif) {
         $dayaVoltAmpere = str_replace(' ', '', strtoupper($tarif->daya));
-        $tarif->kode_tarif = $tarif->golongan . '/' . $dayaVoltAmpere;
+        $tarif->kode_tarif = $tarif->golongan . '/' . $tarif->daya . 'VA';
+
     });
 }
 

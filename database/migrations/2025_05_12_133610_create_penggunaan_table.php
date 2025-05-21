@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('penggunaan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pelanggan')->constrained('pelanggan');
-            $table->string('bulan');
+            $table->integer('bulan');
             $table->integer('tahun');
             $table->integer('meter_awal');
             $table->integer('meter_akhir');

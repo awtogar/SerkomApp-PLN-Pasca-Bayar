@@ -30,8 +30,6 @@ class PembayaranResource extends Resource
         return 'Pembayaran';
     }
     
-        
-
     public static function form(Form $form): Form
     {
         return $form
@@ -118,17 +116,19 @@ class PembayaranResource extends Resource
                 Tables\Columns\TextColumn::make('pelanggan.nomor_meter')
                     ->label('Nomor Meter')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('tagihan.bulan')
-                    ->label('Bulan Tagihan')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('tagihan.tahun')
-                    ->label('Tahun Tagihan')
+                Tables\Columns\TextColumn::make('periode_tagihan')
+                // FIXME: ini belum jalan
+                    ->label('Periode Tagihan')
+                    ->formatStateUsing(function (Pembayaran $record): string {
+                        // Format bulan menjadi 2 digit (01, 02, dst)
+                        $bulan = str_pad($record->tagihan->bulan, 2, '0', STR_PAD_LEFT);
+                        return "{$bulan}/{$record->tagihan->tahun}";
+                    })
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_pembayaran')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('biaya_admin')
-                    ->money('IDR'),
                 Tables\Columns\TextColumn::make('total_bayar')
                     ->money('IDR')
                     ->sortable(),
@@ -165,11 +165,11 @@ class PembayaranResource extends Resource
             ])
             ->actions([
                 Action::make('cetak_struk')
-                            ->label('Cetak Struk')
-                            ->icon('heroicon-o-printer')
-                            ->color('info')
-                            ->url(fn (Pembayaran $record) => route('struk.pembayaran', $record->id))
-                            ->openUrlInNewTab(),
+                    ->label('Cetak Struk')
+                    ->icon('heroicon-o-printer')
+                    ->color('info')
+                    ->url(fn (Pembayaran $record) => route('struk.pembayaran', $record->id))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
