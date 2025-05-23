@@ -1,5 +1,5 @@
 <?php
-// Fixed PelangganResource.php
+//PelangganResource.php
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PelangganResource\Pages;
@@ -21,7 +21,7 @@ class PelangganResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Pelanggan';
-    protected static ?string $navigationGroup = 'Informasi';
+    protected static ?string $navigationGroup = 'Data Pelanggan';
     protected static ?int $navigationSort = 2;
 
     public static function getPluralLabel(): string
@@ -34,12 +34,13 @@ class PelangganResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nomor_meter')
-                    ->required()
-                    ->maxLength(50)
-                    ->unique(ignoreRecord: true),
+                ->numeric()
+                ->required()
+                ->unique(ignoreRecord: true)
+                ->reactive(),
                 Forms\Components\TextInput::make('nama_pelanggan')
                     ->required()
-                    ->maxLength(100),
+                    ->maxLength(32),
                 Forms\Components\Textarea::make('alamat')
                     ->required()
                     ->columnSpanFull(),

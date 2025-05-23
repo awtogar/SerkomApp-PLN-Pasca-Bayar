@@ -22,7 +22,7 @@ class PembayaranResource extends Resource
     protected static ?string $model = Pembayaran::class;
     
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
-    protected static ?string $navigationGroup = 'Pembayaran';
+    protected static ?string $navigationGroup = 'Transaksi Pembayaran';
     protected static ?int $navigationSort = 6;
 
     public static function getPluralLabel(): string

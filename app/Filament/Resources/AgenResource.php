@@ -16,7 +16,7 @@ class AgenResource extends Resource
 {
     protected static ?string $model = Agen::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
-        protected static ?string $navigationGroup = 'Pembayaran';
+    protected static ?string $navigationGroup = 'Transaksi Pembayaran';
     protected static ?int $navigationSort = 5;
     public static function getPluralLabel(): string
     {
@@ -44,6 +44,7 @@ class AgenResource extends Resource
                     ->required(fn (string $operation): bool => $operation === 'create'),
                 
                 Forms\Components\TextInput::make('nama_agen')
+                    ->label('Nama')
                     ->required()
                     ->maxLength(100),
                 
@@ -66,13 +67,16 @@ class AgenResource extends Resource
                     ->searchable(),
                 
                 Tables\Columns\TextColumn::make('nama_agen')
+                ->label('Nama')
                     ->searchable(),
                 
                 Tables\Columns\TextColumn::make('alamat_agen')
+                      ->label('Alamat')
                     ->searchable()
                     ->limit(30),
                 
                 Tables\Columns\TextColumn::make('no_telepon')
+                      ->label('No Telepon')
                     ->searchable(),
                 
                 Tables\Columns\TextColumn::make('created_at')

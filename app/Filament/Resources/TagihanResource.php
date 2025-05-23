@@ -17,7 +17,7 @@ class TagihanResource extends Resource
 {
     protected static ?string $model = Tagihan::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationGroup = 'Pencatatan';
+    protected static ?string $navigationGroup = 'Pencatatan Penggunaan';
     public static function getPluralLabel(): string
     {
         return 'Tagihan';

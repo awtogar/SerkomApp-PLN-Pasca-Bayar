@@ -19,7 +19,7 @@ class TarifResource extends Resource
 {
     protected static ?string $model = Tarif::class;
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
-    protected static ?string $navigationGroup = 'Informasi';
+    protected static ?string $navigationGroup = 'Data Pelanggan';
     protected static ?int $navigationSort = 1;
 
     public static function getPluralLabel(): string

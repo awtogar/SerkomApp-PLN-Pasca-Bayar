@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('id_pelanggan')->constrained('pelanggan');
             $table->integer('bulan');
             $table->integer('tahun');
-            $table->integer('meter_awal');
+            $table->integer('meter_awal')->default(0);
             $table->integer('meter_akhir');
             $table->timestamps();
         });

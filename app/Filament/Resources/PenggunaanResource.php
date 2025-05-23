@@ -17,7 +17,7 @@ class PenggunaanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
     
-    protected static ?string $navigationGroup = 'Pencatatan';
+    protected static ?string $navigationGroup = 'Pencatatan Penggunaan';
     public static function getPluralLabel(): string
     {
         return 'Penggunaan';
@@ -31,7 +31,9 @@ class PenggunaanResource extends Resource
                     ->label('Pelanggan')
                     ->options(Pelanggan::all()->pluck('nama_pelanggan', 'id'))
                     ->required()
+                    ->reactive()
                     ->searchable(),
+
                 Forms\Components\Select::make('bulan')
                     ->label('Bulan')
                     ->options([
@@ -57,7 +59,20 @@ class PenggunaanResource extends Resource
                 Forms\Components\TextInput::make('meter_awal')
                     ->required()
                     ->numeric()
-                    ->minValue(0),
+                    ->minValue(0)
+                    ->default(function ($get) {
+                        $pelangganId = $get('id_pelanggan');
+                        if (!$pelangganId) return 0;
+                        // Ambil penggunaan terakhir untuk pelanggan ini
+                        $last = Penggunaan::where('id_pelanggan', $pelangganId)
+                            ->orderByDesc('tahun')
+                            ->orderByDesc('bulan')
+                            ->first();
+
+                        return $last?->meter_akhir ?? 0;
+                    })
+                     // Optional: disable biar ga bisa diubah manual
+                    ->disabled(),
                 Forms\Components\TextInput::make('meter_akhir')
                     ->required()
                     ->numeric()
@@ -73,6 +88,7 @@ class PenggunaanResource extends Resource
                 Tables\Columns\TextColumn::make('pelanggan.nama_pelanggan')
                     ->label('Pelanggan')
                     ->searchable()
+                    ->limit(32)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('bulan')
                     ->searchable(),

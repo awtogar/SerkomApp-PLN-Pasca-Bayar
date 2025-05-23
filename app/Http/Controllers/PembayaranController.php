@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pembayaran;
+use App\Models\Tagihan;
+use App\Models\Pelanggan;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 

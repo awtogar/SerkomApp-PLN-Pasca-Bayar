@@ -15,7 +15,7 @@ class PetugasResource extends Resource
 {
     protected static ?string $model = Petugas::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Informasi';
+    protected static ?string $navigationGroup = 'Data Pelanggan';
 
     protected static ?int $navigationSort = 3;
 
