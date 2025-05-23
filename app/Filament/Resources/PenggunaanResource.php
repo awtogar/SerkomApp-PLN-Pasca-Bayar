@@ -72,8 +72,7 @@ class PenggunaanResource extends Resource
                         return $last?->meter_akhir ?? 0;
                     }),
                      // Optional: disable biar ga bisa diubah manual
-                    // ->disabled()
-                    
+                    // ->disabled(),
                 Forms\Components\TextInput::make('meter_akhir')
                     ->required()
                     ->numeric()
@@ -92,8 +91,13 @@ class PenggunaanResource extends Resource
                     ->limit(32)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('bulan')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tahun')
+                    ->label('bulan')
+                    ->getStateUsing(function (Penggunaan $record): string {
+                        // Format bulan menjadi 2 digit (01, 02, dst)
+                        $bulan = str_pad($record->bulan, 2, '0', STR_PAD_LEFT);
+                        return "{$bulan}/{$record->tahun}";
+                    })
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('meter_awal')
                     ->numeric(),

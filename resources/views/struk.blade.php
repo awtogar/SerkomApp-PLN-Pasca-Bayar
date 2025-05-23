@@ -151,7 +151,7 @@
                     <img class="logo-items" src="{{ public_path('images/electricity.png') }}" alt="Logo">
                 </div>
             </div>
-            <div class="title">GARXS ELECTRIC</div>
+            <div class="title">Electric Corner</div>
             <div class="date">{{ date('d/m/Y H:i:s') }}</div>
         </div>
         
@@ -166,8 +166,7 @@
             <div class="value">{{ strtoupper($pelanggan->nama_pelanggan) }}</div>
             
             <div class="label">BULAN</div>
-            <div class="value">{{ strtoupper($pembayaran->bulan_bayar) }} {{ $pembayaran->tahun_bayar }}</div>
-            
+            <div class="value">{{ str_pad($pembayaran->bulan_bayar, 2, '0', STR_PAD_LEFT) }}/{{ $pembayaran->tahun_bayar }}</div>            
             <div class="label">AGEN</div>
             <div class="value">{{ $agen->nama_agen }}</div>
             
