@@ -53,8 +53,8 @@ class PenggunaanRelationManager extends RelationManager
                             ->first();
 
                         return $last?->meter_akhir ?? 0;
-                    })
-                    ->disabled(), // Disabled seperti di PenggunaanResource
+                    }),
+                    // ->disabled(),
                 Forms\Components\TextInput::make('meter_akhir')
                     ->required()
                     ->numeric()
