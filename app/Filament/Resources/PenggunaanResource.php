@@ -1,5 +1,5 @@
 <?php
-// Fixed PenggunaanResource.php - Consistent with PenggunaanRelationManager
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PenggunaanResource\Pages;
@@ -10,13 +10,14 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Get;
 
 class PenggunaanResource extends Resource
 {
     protected static ?string $model = Penggunaan::class;
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
     protected static ?string $navigationGroup = 'Pencatatan Penggunaan';
-    
+
     public static function getPluralLabel(): string
     {
         return 'Penggunaan';
@@ -30,31 +31,63 @@ class PenggunaanResource extends Resource
                     ->label('Pelanggan')
                     ->options(Pelanggan::all()->pluck('nama_pelanggan', 'id'))
                     ->required()
-                    ->searchable(),
+                    ->searchable()
+                    ->live(),
 
                 Forms\Components\Select::make('bulan')
                     ->label('Bulan')
-                    ->options([
-                        1 => 'Januari',
-                        2 => 'Februari',
-                        3 => 'Maret',
-                        4 => 'April',
-                        5 => 'Mei',
-                        6 => 'Juni',
-                        7 => 'Juli',
-                        8 => 'Agustus',
-                        9 => 'September',
-                        10 => 'Oktober',
-                        11 => 'November',
-                        12 => 'Desember',
-                    ])
-                    ->required(),
+                    ->options(function (Get $get) {
+                        $idPelanggan = $get('id_pelanggan');
+                        $tahun = $get('tahun');
+
+                        if (!$idPelanggan || !$tahun) {
+                            return [];
+                        }
+
+                        $bulanTerpakai = Penggunaan::where('id_pelanggan', $idPelanggan)
+                            ->where('tahun', $tahun)
+                            ->pluck('bulan')
+                            ->toArray();
+
+                        $semuaBulan = [
+                            1 => 'Januari',
+                            2 => 'Februari',
+                            3 => 'Maret',
+                            4 => 'April',
+                            5 => 'Mei',
+                            6 => 'Juni',
+                            7 => 'Juli',
+                            8 => 'Agustus',
+                            9 => 'September',
+                            10 => 'Oktober',
+                            11 => 'November',
+                            12 => 'Desember',
+                        ];
+
+                        return collect($semuaBulan)
+                            ->reject(fn($label, $key) => in_array($key, $bulanTerpakai))
+                            ->toArray();
+                    })
+                    ->required()
+                    ->live(),
+
 
                 Forms\Components\TextInput::make('tahun')
                     ->required()
                     ->numeric()
-                    ->minValue(2000)
-                    ->maxValue(now()->year),
+                    ->default(function (Get $get) {
+                        $idPelanggan = $get('id_pelanggan');
+                        if (!$idPelanggan) {
+                            return now()->year;
+                        }
+
+                        $tahunTerakhir = Penggunaan::where('id_pelanggan', $idPelanggan)
+                            ->orderByDesc('tahun')
+                            ->value('tahun');
+
+                        return $tahunTerakhir ?? now()->year;
+                    }),
+
 
                 Forms\Components\TextInput::make('meter_awal')
                     ->required()
@@ -110,7 +143,7 @@ class PenggunaanResource extends Resource
 
                 Tables\Columns\TextColumn::make('jumlah_meter')
                     ->label('Total Meter')
-                    ->getStateUsing(fn ($record) => $record->getJumlahMeter())
+                    ->getStateUsing(fn($record) => $record->getJumlahMeter())
                     ->numeric()
                     ->sortable(),
 
@@ -134,7 +167,7 @@ class PenggunaanResource extends Resource
                     ->label('Bulan')
                     ->options([
                         1 => 'Januari',
-                        2 => 'Februari', 
+                        2 => 'Februari',
                         3 => 'Maret',
                         4 => 'April',
                         5 => 'Mei',
@@ -156,7 +189,7 @@ class PenggunaanResource extends Resource
                     ->query(function ($query, array $data) {
                         return $query->when(
                             $data['tahun'],
-                            fn ($query, $tahun) => $query->where('tahun', $tahun)
+                            fn($query, $tahun) => $query->where('tahun', $tahun)
                         );
                     }),
             ])

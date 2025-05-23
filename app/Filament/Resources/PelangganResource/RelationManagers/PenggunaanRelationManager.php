@@ -8,6 +8,9 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Get;
+use Filament\Tables\Filters;
+use App\Models\Pelanggan;
 
 class PenggunaanRelationManager extends RelationManager
 {
@@ -68,23 +71,32 @@ class PenggunaanRelationManager extends RelationManager
         return $table
         ->recordTitleAttribute('bulan')
             ->columns([
-                Tables\Columns\TextColumn::make('bulan')
-                ->getStateUsing(function (Penggunaan $record): string {
-                // Format bulan menjadi 2 digit (01, 02, dst)
-                $bulan = str_pad($record->bulan, 2, '0', STR_PAD_LEFT);
-                return "{$bulan}/{$record->tahun}";
+               Tables\Columns\TextColumn::make('bulan')
+                    ->label('Periode')
+                    ->getStateUsing(function (Penggunaan $record): string {
+                        // Format bulan menjadi 2 digit (01, 02, dst) - Same as RelationManager
+                        $bulan = str_pad($record->bulan, 2, '0', STR_PAD_LEFT);
+                        return "{$bulan}/{$record->tahun}";
                     })
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('tahun')
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('meter_awal')
-                    ->numeric(),
+                    ->numeric()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('meter_akhir')
-                    ->numeric(),
+                    ->numeric()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('jumlah_meter')
                     ->label('Total Meter')
-                    ->getStateUsing(fn ($record) => $record->getJumlahMeter())
-                    ->numeric(),
+                    ->getStateUsing(fn($record) => $record->getJumlahMeter())
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -94,8 +106,41 @@ class PenggunaanRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
+             ->filters([
+                Tables\Filters\SelectFilter::make('id_pelanggan')
+                    ->label('Pelanggan')
+                    ->options(Pelanggan::all()->pluck('nama_pelanggan', 'id'))
+                    ->searchable(),
+
+                Tables\Filters\SelectFilter::make('bulan')
+                    ->label('Bulan')
+                    ->options([
+                        1 => 'Januari',
+                        2 => 'Februari',
+                        3 => 'Maret',
+                        4 => 'April',
+                        5 => 'Mei',
+                        6 => 'Juni',
+                        7 => 'Juli',
+                        8 => 'Agustus',
+                        9 => 'September',
+                        10 => 'Oktober',
+                        11 => 'November',
+                        12 => 'Desember',
+                    ]),
+
+                Tables\Filters\Filter::make('tahun')
+                    ->form([
+                        Forms\Components\TextInput::make('tahun')
+                            ->numeric()
+                            ->placeholder('2024'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query->when(
+                            $data['tahun'],
+                            fn($query, $tahun) => $query->where('tahun', $tahun)
+                        );
+                    }),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
