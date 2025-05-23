@@ -51,6 +51,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-weight: bold;
+            color: #333;
         }
         
         .logo .logo-items {
@@ -63,15 +65,19 @@
             margin-bottom: 5px;
         }
         
+
+        
         .title {
             font-weight: bold;
             font-size: 12px;
             margin-bottom: 2px;
+            text-align: center;
         }
         
         .date {
             font-size: 11px;
             color: #555;
+            text-align: center;
         }
         
         .divider {
@@ -137,37 +143,36 @@
     <div class="struk">
         <div class="watermark">LUNAS</div>
         
-        <!-- Logo -->
-        <div class="logo-container">
-            <div class="logo">
-                <img class="logo-items" src="{{ public_path('images/electricity.png') }}" alt="Logo">
-            </div>
-        </div>
-        
         <!-- Header -->
         <div class="header">
+            <!-- Logo -->
+            <div class="logo-container">
+                <div class="logo">
+                    <img class="logo-items" src="{{ public_path('images/electricity.png') }}" alt="Logo">
+                </div>
+            </div>
             <div class="title">GARXS ELECTRIC</div>
-            <div class="date">{{ now()->format('d/m/Y H:i:s') }}</div>
+            <div class="date">{{ date('d/m/Y H:i:s') }}</div>
         </div>
         
         <div class="divider"></div>
         
         <!-- Content -->
         <div class="content">
-            <div class="label">IDPEL</div>
+            <div class="label">NOMOR PELANGGAN</div>
             <div class="value">{{ $pelanggan->nomor_meter }}</div>
             
             <div class="label">NAMA</div>
             <div class="value">{{ strtoupper($pelanggan->nama_pelanggan) }}</div>
             
             <div class="label">BULAN</div>
-            <div class="value">{{ strtoupper($tagihan->bulan) }} {{ $tagihan->tahun }}</div>
+            <div class="value">{{ strtoupper($pembayaran->bulan_bayar) }} {{ $pembayaran->tahun_bayar }}</div>
             
             <div class="label">AGEN</div>
             <div class="value">{{ $agen->nama_agen }}</div>
             
             <div class="label">TGL BAYAR</div>
-            <div class="value">{{ $pembayaran->tanggal_pembayaran->format('d/m/Y') }}</div>
+            <div class="value">{{ date('d/m/Y', strtotime($pembayaran->tanggal_pembayaran)) }}</div>
         </div>
 
         <div class="divider"></div>
@@ -175,7 +180,7 @@
         <!-- Rincian Pembayaran -->
         <div class="content summary">
             <div class="label">TAGIHAN</div>
-            <div class="value">Rp {{ number_format($tagihan->total_bayar, 0, ',', '.') }}</div>
+            <div class="value">Rp {{ number_format($pembayaran->total_bayar, 0, ',', '.') }}</div>
             
             <div class="label">BIAYA ADMIN</div>
             <div class="value">Rp {{ number_format($pembayaran->biaya_admin, 0, ',', '.') }}</div>

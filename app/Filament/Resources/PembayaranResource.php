@@ -35,7 +35,7 @@ class PembayaranResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('id_tagihan')
-                    ->label('Tagihan')
+                    ->label('Tagihan (Nomor Meter - Pelanggan)')
                     ->options(function () {
                         $query = Tagihan::where('status', 0)->whereDoesntHave('pembayaran');
                         
@@ -45,10 +45,10 @@ class PembayaranResource extends Resource
                             $query->where('id', $tagihanId);
                         }
                         
-                        return $query->get()->mapWithKeys(function ($tagihan) {
+                        return $query->with('pelanggan')->get()->mapWithKeys(function ($tagihan) {
                             $pelanggan = $tagihan->pelanggan;
                             return [
-                                $tagihan->id => "{$pelanggan->nama_pelanggan} - {$pelanggan->nomor_meter} - {$tagihan->bulan} {$tagihan->tahun} - Rp " . number_format($tagihan->total_bayar, 0, ',', '.')
+                                $tagihan->id => "{$pelanggan->nama_pelanggan}({$pelanggan->nomor_meter})",
                             ];
                         });
                     })
@@ -57,7 +57,7 @@ class PembayaranResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
-                            $tagihan = Tagihan::find($state);
+                            $tagihan = Tagihan::with('pelanggan')->find($state);
                             if ($tagihan) {
                                 $set('id_pelanggan', $tagihan->id_pelanggan);
                                 $set('bulan_bayar', $tagihan->bulan);
@@ -115,23 +115,31 @@ class PembayaranResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('pelanggan.nomor_meter')
                     ->label('Nomor Meter')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('periode_tagihan')
-                // FIXME: ini belum jalan
                     ->label('Periode Tagihan')
-                    ->formatStateUsing(function (Pembayaran $record): string {
+                    ->getStateUsing(function (Pembayaran $record): string {
                         // Format bulan menjadi 2 digit (01, 02, dst)
-                        $bulan = str_pad($record->tagihan->bulan, 2, '0', STR_PAD_LEFT);
-                        return "{$bulan}/{$record->tagihan->tahun}";
+                        $bulan = str_pad($record->bulan_bayar, 2, '0', STR_PAD_LEFT);
+                        return "{$bulan}/{$record->tahun_bayar}";
                     })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_pembayaran')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_bayar')
-                    ->money('IDR')
+                Tables\Columns\TextColumn::make('total_keseluruhan')
+                    ->label('Total Bayar')
+                    ->getStateUsing(function (Pembayaran $record): string {
+                        $total = $record->total_bayar + $record->biaya_admin;
+                        return 'Rp ' . number_format($total, 0, ',', '.');
+                    })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('biaya_admin')
+                    ->money('IDR')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('agen.nama_agen')
                     ->label('Agen')
                     ->searchable(),
@@ -171,11 +179,25 @@ class PembayaranResource extends Resource
                     ->url(fn (Pembayaran $record) => route('struk.pembayaran', $record->id))
                     ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function ($record) {
+                        // Kembalikan status tagihan menjadi belum dibayar
+                        if ($record->tagihan) {
+                            $record->tagihan->update(['status' => 0]);
+                        }
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->before(function ($records) {
+                            foreach ($records as $record) {
+                                // Kembalikan status tagihan menjadi belum dibayar
+                                if ($record->tagihan) {
+                                    $record->tagihan->update(['status' => 0]);
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }

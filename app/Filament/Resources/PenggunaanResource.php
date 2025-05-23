@@ -70,9 +70,10 @@ class PenggunaanResource extends Resource
                             ->first();
 
                         return $last?->meter_akhir ?? 0;
-                    })
+                    }),
                      // Optional: disable biar ga bisa diubah manual
-                    ->disabled(),
+                    // ->disabled()
+                    
                 Forms\Components\TextInput::make('meter_akhir')
                     ->required()
                     ->numeric()

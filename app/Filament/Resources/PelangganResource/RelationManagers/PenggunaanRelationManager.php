@@ -15,7 +15,7 @@ class PenggunaanRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-         return $form
+        return $form
             ->schema([
                 Forms\Components\Select::make('bulan')
                     ->label('Bulan')
@@ -42,7 +42,19 @@ class PenggunaanRelationManager extends RelationManager
                 Forms\Components\TextInput::make('meter_awal')
                     ->required()
                     ->numeric()
-                    ->minValue(0),
+                    ->minValue(0)
+                    ->default(function () {
+                        $pelangganId = $this->ownerRecord->id;
+                        
+                        // Ambil penggunaan terakhir untuk pelanggan ini
+                        $last = Penggunaan::where('id_pelanggan', $pelangganId)
+                            ->orderByDesc('tahun')
+                            ->orderByDesc('bulan')
+                            ->first();
+
+                        return $last?->meter_akhir ?? 0;
+                    })
+                    ->disabled(), // Disabled seperti di PenggunaanResource
                 Forms\Components\TextInput::make('meter_akhir')
                     ->required()
                     ->numeric()
@@ -56,7 +68,9 @@ class PenggunaanRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('bulan')
             ->columns([
-                  Tables\Columns\TextColumn::make('tahun')
+                Tables\Columns\TextColumn::make('bulan')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tahun')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('meter_awal')
                     ->numeric(),
@@ -65,7 +79,15 @@ class PenggunaanRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('jumlah_meter')
                     ->label('Total Meter')
                     ->getStateUsing(fn ($record) => $record->getJumlahMeter())
-                    ->numeric(),         
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
