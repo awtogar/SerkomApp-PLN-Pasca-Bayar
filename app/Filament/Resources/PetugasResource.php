@@ -42,7 +42,7 @@ class PetugasResource extends Resource
                 Forms\Components\Select::make('level')
                     ->options([
                         'admin' => 'Admin',
-                        'staff' => 'Staff',
+                        'petugas' => 'Petugas',
                     ])
                     ->required(),
             ]);
